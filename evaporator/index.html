@@ -1,0 +1,2286 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>ETS Alat Industri Kimia — Evaporator</title>
+
+
+<style>
+
+:root{
+  --navy:#153452;
+  --blue:#2f6fa5;
+  --gold:#b28734;
+  --ink:#23364b;
+  --muted:#69798b;
+  --line:#d8e0e7;
+  --paper:#fbfaf7;
+  --bad:#a2443f;
+  --ok:#24734f;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color:var(--ink);
+
+  background:
+    linear-gradient(
+      180deg,
+      #f5f1e8,
+      #fafafa 220px,
+      #f6f7f8
+    );
+}
+
+body.exam{
+  user-select:none;
+}
+
+.wrap{
+  max-width:920px;
+  margin:auto;
+  padding:28px 18px 48px;
+}
+
+.card{
+  background:var(--paper);
+  border:1px solid #ded8cb;
+  border-radius:22px;
+  padding:30px;
+
+  box-shadow:
+    0 10px 30px
+    rgba(30,48,66,.07);
+}
+
+.eyebrow{
+  font:
+    700 13px Georgia,
+    serif;
+
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+
+h1,
+h2{
+  font-family:Georgia,serif;
+  color:var(--navy);
+}
+
+h1{
+  font-size:
+    clamp(
+      34px,
+      5vw,
+      52px
+    );
+
+  line-height:1.08;
+  margin:8px 0 14px;
+}
+
+.sub{
+  font-size:18px;
+  color:var(--muted);
+  line-height:1.55;
+}
+
+.rule{
+  height:2px;
+  background:var(--gold);
+  margin:22px 0;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.box{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:15px;
+}
+
+.box b{
+  display:block;
+  color:var(--navy);
+  margin-bottom:5px;
+}
+
+.box span,
+.small{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:20px 0;
+}
+
+label{
+  font-size:13px;
+  font-weight:700;
+  color:var(--navy);
+}
+
+input[type=text]{
+  width:100%;
+  margin-top:7px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  font-size:16px;
+  background:#fff;
+}
+
+.check{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin:18px 0;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  padding:11px 17px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:15px;
+  min-height:44px;
+}
+
+.btn.primary{
+  background:var(--navy);
+  color:#fff;
+  border-color:var(--navy);
+}
+
+.btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.timer{
+  font:700 30px Georgia,serif;
+  color:var(--navy);
+}
+
+.status{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.progress{
+  height:8px;
+  background:#edf1f4;
+  border-radius:999px;
+  overflow:hidden;
+  margin:14px 0 22px;
+}
+
+.progress div{
+  height:100%;
+  background:var(--blue);
+  width:0;
+  transition:.2s;
+}
+
+.qmeta{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.q{
+  font:24px/1.45 Georgia,serif;
+  color:var(--navy);
+  margin:8px 0 18px;
+}
+
+.opts{
+  display:grid;
+  gap:10px;
+}
+
+.opt{
+  display:flex;
+  gap:12px;
+  width:100%;
+  text-align:left;
+  background:#fff;
+  border:1px solid var(--line);
+  padding:14px 15px;
+  border-radius:11px;
+  cursor:pointer;
+  font-size:16px;
+  color:var(--ink);
+}
+
+.opt:hover{
+  border-color:#9fb4c6;
+  background:#fafcfd;
+}
+
+.opt.sel{
+  border-color:var(--navy);
+  background:#edf3f8;
+}
+
+.letter{
+  font-weight:700;
+  color:var(--navy);
+  min-width:22px;
+}
+
+.actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:20px;
+}
+
+textarea{
+  width:100%;
+  min-height:260px;
+  resize:vertical;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+  outline:none;
+
+  font:
+    16px/1.55 Arial,
+    Helvetica,
+    sans-serif;
+
+  color:var(--ink);
+  background:#fff;
+}
+
+.wordcount{
+  text-align:right;
+  font-size:13px;
+  color:var(--muted);
+  margin-top:7px;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(10,24,38,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:10;
+}
+
+.warn{
+  max-width:520px;
+  background:#fff;
+  border-radius:18px;
+  padding:28px;
+  text-align:center;
+}
+
+.result{
+  text-align:center;
+}
+
+.checkmark{
+  width:72px;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:10px auto 20px;
+  border-radius:50%;
+  background:#eaf4ee;
+  color:var(--ok);
+  font-size:38px;
+  font-weight:bold;
+}
+
+.badge{
+  display:inline-block;
+  background:#eef3f8;
+  color:var(--navy);
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:13px;
+  font-weight:700;
+  margin-top:8px;
+}
+
+.error{
+  color:var(--bad);
+  font-weight:700;
+  line-height:1.5;
+}
+
+.success{
+  color:var(--ok);
+  font-weight:700;
+}
+
+.loading{
+  opacity:.65;
+  pointer-events:none;
+}
+
+@media(max-width:700px){
+
+  .grid,
+  .form{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    padding:22px;
+  }
+
+  .q{
+    font-size:21px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+
+<!-- ===================================================
+     START
+=================================================== -->
+
+<section
+  class="card"
+  id="start"
+>
+
+<div class="eyebrow">
+EVALUASI TENGAH SEMESTER
+</div>
+
+<h1>
+Alat Industri Kimia
+</h1>
+
+<p class="sub">
+Evaporator
+</p>
+
+<div class="rule"></div>
+
+
+<div class="grid">
+
+<div class="box">
+
+<b>
+16 Pilihan Ganda
+</b>
+
+<span>
+Seluruh soal wajib dikerjakan.
+</span>
+
+</div>
+
+
+<div class="box">
+
+<b>
+4 Uraian
+</b>
+
+<span>
+Seluruh soal wajib dikerjakan.
+</span>
+
+</div>
+
+
+<div class="box">
+
+<b>
+45 Menit
+</b>
+
+<span>
+Urutan soal dan pilihan jawaban diacak.
+</span>
+
+</div>
+
+</div>
+
+
+<div class="form">
+
+<label>
+
+Nama Mahasiswa
+
+<input
+  id="name"
+  type="text"
+  autocomplete="off"
+  placeholder="Nama lengkap"
+>
+
+</label>
+
+
+<label>
+
+NPM
+
+<input
+  id="npm"
+  type="text"
+  autocomplete="off"
+  placeholder="NPM"
+>
+
+</label>
+
+</div>
+
+
+<label class="check">
+
+<input
+  id="agree"
+  type="checkbox"
+>
+
+<span>
+
+Saya memahami bahwa soal dikerjakan satu per satu,
+tidak dapat kembali ke soal sebelumnya,
+dan perpindahan tab akan tercatat.
+
+</span>
+
+</label>
+
+
+<button
+  id="startBtn"
+  class="btn primary"
+  disabled
+>
+Mulai ETS
+</button>
+
+
+<p
+  id="startError"
+  class="error"
+></p>
+
+</section>
+
+
+
+<!-- ===================================================
+     EXAM
+=================================================== -->
+
+<section
+  class="card hidden"
+  id="exam"
+>
+
+<div class="top">
+
+<div>
+
+<div class="eyebrow">
+ETS • EVAPORATOR
+</div>
+
+<div
+  id="student"
+  class="status"
+></div>
+
+</div>
+
+
+<div style="text-align:right">
+
+<div
+  id="timer"
+  class="timer"
+>
+45:00
+</div>
+
+
+<div class="status">
+
+Perpindahan tab:
+
+<b id="viol">
+0
+</b>
+
+/3
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="progress">
+<div id="bar"></div>
+</div>
+
+
+<div
+  id="qmeta"
+  class="qmeta"
+></div>
+
+
+<div
+  id="qtext"
+  class="q"
+></div>
+
+
+<div id="mcqArea">
+
+<div
+  id="opts"
+  class="opts"
+></div>
+
+</div>
+
+
+<div
+  id="essayArea"
+  class="hidden"
+>
+
+<textarea
+  id="essayInput"
+  placeholder="Tuliskan jawaban Anda secara jelas dan lengkap..."
+></textarea>
+
+<div class="wordcount">
+
+<span id="wordCount">
+0
+</span>
+
+kata
+
+</div>
+
+</div>
+
+
+<p
+  id="examError"
+  class="error"
+></p>
+
+
+<div class="actions">
+
+<button
+  id="next"
+  class="btn primary"
+  disabled
+>
+Soal Berikutnya →
+</button>
+
+</div>
+
+</section>
+
+
+
+<!-- ===================================================
+     RESULT
+=================================================== -->
+
+<section
+  class="card hidden result"
+  id="result"
+>
+
+<div class="checkmark">
+✓
+</div>
+
+<div class="eyebrow">
+SUBMISSION RECEIVED
+</div>
+
+<h2>
+Jawaban Berhasil Dikirim
+</h2>
+
+<p class="success">
+Jawaban Anda telah tersimpan.
+</p>
+
+<div
+  id="submissionId"
+  class="badge"
+></div>
+
+<p class="small">
+Pastikan halaman ini sudah muncul sebelum menutup browser.
+</p>
+
+</section>
+
+</div>
+
+
+
+<!-- ===================================================
+     TAB WARNING
+=================================================== -->
+
+<div
+  id="overlay"
+  class="overlay hidden"
+>
+
+<div class="warn">
+
+<h2>
+Perpindahan Tab Terdeteksi
+</h2>
+
+<p id="warnText"></p>
+
+<button
+  id="backBtn"
+  class="btn primary"
+>
+Kembali ke Ujian
+</button>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+/* ===================================================
+   SUPABASE
+=================================================== */
+
+const SUPABASE_URL =
+  "https://ofnfcojkwlojvjiuaivh.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_176X2v4_F8xN1bL-ATPjdg_joLsgsRi";
+
+
+/* ===================================================
+   CONFIG
+=================================================== */
+
+const CFG = {
+
+  minutes:45,
+
+  maxViol:3
+
+};
+
+
+const $ =
+  id =>
+  document.getElementById(id);
+
+
+let attemptId = null;
+
+let items = [];
+
+let idx = 0;
+
+let selectedOption = null;
+
+let pgAnswers = {};
+
+let essayAnswers = {};
+
+let violations = 0;
+
+let secondsLeft =
+  CFG.minutes * 60;
+
+let timerInterval = null;
+
+let started = false;
+
+let submitted = false;
+
+let pendingWarning = false;
+
+
+
+/* ===================================================
+   SHUFFLE
+=================================================== */
+
+function shuffle(array){
+
+  const a =
+    [...array];
+
+
+  for(
+    let i =
+      a.length - 1;
+
+    i > 0;
+
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random() *
+        (i + 1)
+      );
+
+
+    [
+      a[i],
+      a[j]
+    ] =
+    [
+      a[j],
+      a[i]
+    ];
+
+  }
+
+
+  return a;
+
+}
+
+
+
+/* ===================================================
+   CONFIG CHECK
+=================================================== */
+
+function readyConfig(){
+
+  return (
+
+    SUPABASE_URL
+      .startsWith(
+        "https://"
+      )
+
+    &&
+
+    SUPABASE_PUBLISHABLE_KEY
+      .length > 20
+
+  );
+
+}
+
+
+
+/* ===================================================
+   SUPABASE RPC
+=================================================== */
+
+async function rpc(
+  functionName,
+  body
+){
+
+  const response =
+    await fetch(
+
+      `${SUPABASE_URL}/rest/v1/rpc/${functionName}`,
+
+      {
+
+        method:"POST",
+
+        headers:{
+
+          "Content-Type":
+            "application/json",
+
+          "apikey":
+            SUPABASE_PUBLISHABLE_KEY,
+
+          "Authorization":
+            `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+
+        },
+
+        body:
+          JSON.stringify(body)
+
+      }
+
+    );
+
+
+  let data = null;
+
+
+  try{
+
+    data =
+      await response.json();
+
+  }
+
+  catch(error){
+
+    data = null;
+
+  }
+
+
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+
+      data?.message
+      ||
+      data?.error
+      ||
+      `HTTP ${response.status}`
+
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+
+/* ===================================================
+   START FORM
+=================================================== */
+
+function validateStart(){
+
+  const name =
+    $("name")
+      .value
+      .trim();
+
+
+  const npm =
+    $("npm")
+      .value
+      .trim();
+
+
+  $("startBtn").disabled =
+    !(
+
+      name.length >= 2
+
+      &&
+
+      npm.length >= 3
+
+      &&
+
+      $("agree").checked
+
+    );
+
+}
+
+
+$("name")
+  .addEventListener(
+    "input",
+    validateStart
+  );
+
+
+$("npm")
+  .addEventListener(
+    "input",
+    validateStart
+  );
+
+
+$("agree")
+  .addEventListener(
+    "change",
+    validateStart
+  );
+
+
+
+/* ===================================================
+   START EXAM
+=================================================== */
+
+$("startBtn").onclick =
+async ()=>{
+
+  $("startError").textContent =
+    "";
+
+
+  if(
+    !readyConfig()
+  ){
+
+    $("startError").textContent =
+      "Konfigurasi ujian belum tersedia.";
+
+    return;
+
+  }
+
+
+  const studentName =
+    $("name")
+      .value
+      .trim();
+
+
+  const studentNpm =
+    $("npm")
+      .value
+      .trim();
+
+
+  $("startBtn").disabled =
+    true;
+
+
+  $("startBtn").textContent =
+    "Menyiapkan soal…";
+
+
+  $("start")
+    .classList
+    .add(
+      "loading"
+    );
+
+
+  try{
+
+
+    const data =
+      await rpc(
+
+        "start_evaporator_exam",
+
+        {
+
+          p_name:
+            studentName,
+
+          p_npm:
+            studentNpm
+
+        }
+
+      );
+
+
+    attemptId =
+      data.attempt_id;
+
+
+    const mcqs =
+      (
+        data.questions
+        ||
+        []
+      )
+
+      .map(
+
+        question =>({
+
+          type:"mcq",
+
+          id:question.id,
+
+          code:question.code,
+
+          topic:question.topic,
+
+          question:
+            question.question,
+
+          options:
+            shuffle(
+              question.options
+              ||
+              []
+            )
+
+        })
+
+      );
+
+
+    const essays =
+      (
+        data.essays
+        ||
+        []
+      )
+
+      .map(
+
+        essay =>({
+
+          type:"essay",
+
+          id:essay.id,
+
+          code:essay.code,
+
+          topic:essay.topic,
+
+          question:
+            essay.question
+
+        })
+
+      );
+
+
+    if(
+      mcqs.length !== 16
+      ||
+      essays.length !== 4
+    ){
+
+      throw new Error(
+        "Jumlah soal dari database tidak sesuai."
+      );
+
+    }
+
+
+    /*
+    SEMUA 16 PG + 4 URAIAN
+    DIACAK MENJADI 20 SOAL
+    */
+
+    items =
+      shuffle(
+        [
+          ...mcqs,
+          ...essays
+        ]
+      );
+
+
+    idx = 0;
+
+    selectedOption = null;
+
+    pgAnswers = {};
+
+    essayAnswers = {};
+
+    violations = 0;
+
+    secondsLeft =
+      CFG.minutes * 60;
+
+    started = true;
+
+    submitted = false;
+
+    pendingWarning = false;
+
+
+    document
+      .body
+      .classList
+      .add(
+        "exam"
+      );
+
+
+    $("start")
+      .classList
+      .remove(
+        "loading"
+      );
+
+
+    $("start")
+      .classList
+      .add(
+        "hidden"
+      );
+
+
+    $("exam")
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    $("student").textContent =
+      studentName
+      +
+      " • "
+      +
+      studentNpm;
+
+
+    $("viol").textContent =
+      violations;
+
+
+    try{
+
+      await document
+        .documentElement
+        .requestFullscreen?.();
+
+    }
+
+    catch(error){
+
+    }
+
+
+    renderQuestion();
+
+    updateClock();
+
+
+    timerInterval =
+      setInterval(
+
+        ()=>{
+
+          secondsLeft--;
+
+          updateClock();
+
+
+          if(
+            secondsLeft <= 0
+          ){
+
+            finishExam(
+              "Waktu habis — submit otomatis"
+            );
+
+          }
+
+        },
+
+        1000
+
+      );
+
+  }
+
+  catch(error){
+
+
+    $("start")
+      .classList
+      .remove(
+        "loading"
+      );
+
+
+    $("startError").textContent =
+      "Gagal memulai ujian: "
+      +
+      error.message;
+
+
+    $("startBtn").disabled =
+      false;
+
+
+    $("startBtn").textContent =
+      "Mulai ETS";
+
+  }
+
+};
+
+
+
+/* ===================================================
+   TIMER
+=================================================== */
+
+function updateClock(){
+
+  const safeTime =
+    Math.max(
+      0,
+      secondsLeft
+    );
+
+
+  const minutes =
+    Math.floor(
+      safeTime / 60
+    );
+
+
+  const seconds =
+    safeTime % 60;
+
+
+  $("timer").textContent =
+
+    String(minutes)
+      .padStart(
+        2,
+        "0"
+      )
+
+    +
+
+    ":"
+
+    +
+
+    String(seconds)
+      .padStart(
+        2,
+        "0"
+      );
+
+
+  if(
+    secondsLeft <= 300
+  ){
+
+    $("timer").style.color =
+      "var(--bad)";
+
+  }
+
+}
+
+
+
+/* ===================================================
+   RENDER QUESTION
+=================================================== */
+
+function renderQuestion(){
+
+  selectedOption = null;
+
+  $("next").disabled = true;
+
+  $("examError").textContent =
+    "";
+
+
+  const item =
+    items[idx];
+
+
+  if(
+    !item
+  ){
+
+    $("examError").textContent =
+      "Soal tidak ditemukan.";
+
+    return;
+
+  }
+
+
+  $("qmeta").textContent =
+    `Soal ${idx + 1} dari ${items.length}`;
+
+
+  $("qtext").textContent =
+    item.question;
+
+
+  $("bar").style.width =
+    (
+      (
+        idx + 1
+      )
+      /
+      items.length
+      *
+      100
+    )
+    +
+    "%";
+
+
+  if(
+    item.type ===
+    "mcq"
+  ){
+
+    $("mcqArea")
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    $("essayArea")
+      .classList
+      .add(
+        "hidden"
+      );
+
+
+    $("opts").innerHTML =
+      "";
+
+
+    item.options
+      .forEach(
+
+        (
+          option,
+          optionIndex
+        )=>{
+
+
+          const button =
+            document
+              .createElement(
+                "button"
+              );
+
+
+          button.className =
+            "opt";
+
+
+          button.type =
+            "button";
+
+
+          const letter =
+            document
+              .createElement(
+                "span"
+              );
+
+
+          letter.className =
+            "letter";
+
+
+          letter.textContent =
+            String.fromCharCode(
+              65 + optionIndex
+            )
+            +
+            ".";
+
+
+          const text =
+            document
+              .createElement(
+                "span"
+              );
+
+
+          text.textContent =
+            option;
+
+
+          button
+            .appendChild(
+              letter
+            );
+
+
+          button
+            .appendChild(
+              text
+            );
+
+
+          button.onclick =
+          ()=>{
+
+
+            selectedOption =
+              option;
+
+
+            [
+              ...$("opts").children
+            ]
+
+            .forEach(
+
+              element =>
+                element
+                  .classList
+                  .remove(
+                    "sel"
+                  )
+
+            );
+
+
+            button
+              .classList
+              .add(
+                "sel"
+              );
+
+
+            $("next").disabled =
+              false;
+
+          };
+
+
+          $("opts")
+            .appendChild(
+              button
+            );
+
+        }
+
+      );
+
+  }
+
+  else{
+
+
+    $("mcqArea")
+      .classList
+      .add(
+        "hidden"
+      );
+
+
+    $("essayArea")
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    const savedAnswer =
+      essayAnswers[
+        item.id
+      ]
+      ||
+      "";
+
+
+    $("essayInput").value =
+      savedAnswer;
+
+
+    updateWordCount();
+
+
+    $("next").disabled =
+      !savedAnswer.trim();
+
+
+    $("essayInput")
+      .focus();
+
+  }
+
+
+  if(
+    idx ===
+    items.length - 1
+  ){
+
+    $("next").textContent =
+      "Submit Jawaban";
+
+  }
+
+  else{
+
+    $("next").textContent =
+      "Soal Berikutnya →";
+
+  }
+
+}
+
+
+
+/* ===================================================
+   WORD COUNT
+=================================================== */
+
+function updateWordCount(){
+
+  const text =
+    $("essayInput")
+      .value
+      .trim();
+
+
+  const count =
+    text
+
+    ?
+
+    text
+      .split(
+        /\s+/
+      )
+      .length
+
+    :
+
+    0;
+
+
+  $("wordCount").textContent =
+    count;
+
+}
+
+
+$("essayInput")
+  .addEventListener(
+
+    "input",
+
+    ()=>{
+
+
+      const item =
+        items[idx];
+
+
+      if(
+        item?.type !==
+        "essay"
+      ){
+
+        return;
+
+      }
+
+
+      essayAnswers[
+        item.id
+      ] =
+        $("essayInput").value;
+
+
+      updateWordCount();
+
+
+      $("next").disabled =
+        !$("essayInput")
+          .value
+          .trim();
+
+    }
+
+  );
+
+
+
+/* ===================================================
+   NEXT
+=================================================== */
+
+$("next").onclick =
+async ()=>{
+
+
+  const item =
+    items[idx];
+
+
+  if(
+    item.type ===
+    "mcq"
+  ){
+
+
+    if(
+      !selectedOption
+    ){
+
+      return;
+
+    }
+
+
+    pgAnswers[
+      item.id
+    ] =
+      selectedOption;
+
+  }
+
+  else{
+
+
+    const answer =
+      $("essayInput")
+        .value
+        .trim();
+
+
+    if(
+      !answer
+    ){
+
+      return;
+
+    }
+
+
+    essayAnswers[
+      item.id
+    ] =
+      answer;
+
+  }
+
+
+  if(
+    idx <
+    items.length - 1
+  ){
+
+    idx++;
+
+    renderQuestion();
+
+  }
+
+  else{
+
+    await finishExam(
+      "Disubmit oleh mahasiswa"
+    );
+
+  }
+
+};
+
+
+
+/* ===================================================
+   SUBMIT
+=================================================== */
+
+async function finishExam(
+  reason
+){
+
+
+  if(
+    submitted
+  ){
+
+    return;
+
+  }
+
+
+  submitted = true;
+
+  started = false;
+
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  const activeItem =
+    items[idx];
+
+
+  /*
+  SIMPAN JAWABAN AKTIF
+  JIKA AUTO-SUBMIT
+  */
+
+
+  if(
+    activeItem?.type ===
+    "mcq"
+    &&
+    selectedOption
+  ){
+
+    pgAnswers[
+      activeItem.id
+    ] =
+      selectedOption;
+
+  }
+
+
+  if(
+    activeItem?.type ===
+    "essay"
+  ){
+
+    const text =
+      $("essayInput")
+        .value
+        .trim();
+
+
+    if(
+      text
+    ){
+
+      essayAnswers[
+        activeItem.id
+      ] =
+        text;
+
+    }
+
+  }
+
+
+  const pgPayload =
+    Object.entries(
+      pgAnswers
+    )
+
+    .map(
+
+      (
+        [
+          questionId,
+          answer
+        ]
+      ) =>({
+
+        question_id:
+          questionId,
+
+        answer:
+          answer
+
+      })
+
+    );
+
+
+  const essayPayload =
+    Object.entries(
+      essayAnswers
+    )
+
+    .map(
+
+      (
+        [
+          essayId,
+          answerText
+        ]
+      ) =>({
+
+        essay_id:
+          essayId,
+
+        answer_text:
+          answerText
+
+      })
+
+    );
+
+
+  $("next").disabled =
+    true;
+
+
+  $("next").textContent =
+    "Mengirim…";
+
+
+  $("examError").textContent =
+    "";
+
+
+  try{
+
+
+    const data =
+      await rpc(
+
+        "submit_evaporator_exam",
+
+        {
+
+          p_attempt_id:
+            attemptId,
+
+          p_answers:
+            pgPayload,
+
+          p_essay_answers:
+            essayPayload,
+
+          p_tab_violations:
+            violations,
+
+          p_submit_reason:
+            reason
+
+        }
+
+      );
+
+
+    document
+      .body
+      .classList
+      .remove(
+        "exam"
+      );
+
+
+    $("overlay")
+      .classList
+      .add(
+        "hidden"
+      );
+
+
+    $("exam")
+      .classList
+      .add(
+        "hidden"
+      );
+
+
+    $("result")
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    /*
+    NILAI TIDAK DITAMPILKAN.
+    SCORE PG TERSIMPAN DI SUPABASE.
+    */
+
+    $("submissionId").textContent =
+      "Submission ID: "
+      +
+      data.attempt_id;
+
+
+    try{
+
+
+      if(
+        document.fullscreenElement
+      ){
+
+        await document
+          .exitFullscreen();
+
+      }
+
+    }
+
+    catch(error){
+
+    }
+
+  }
+
+  catch(error){
+
+
+    submitted = false;
+
+    started = true;
+
+
+    $("examError").textContent =
+      "Submit gagal: "
+      +
+      error.message
+      +
+      ". Jangan tutup halaman. Silakan tekan Submit lagi.";
+
+
+    $("next").disabled =
+      false;
+
+
+    $("next").textContent =
+      "Coba Submit Lagi";
+
+  }
+
+}
+
+
+
+/* ===================================================
+   TAB SWITCH
+=================================================== */
+
+document
+  .addEventListener(
+
+    "visibilitychange",
+
+    ()=>{
+
+
+      if(
+        !started
+        ||
+        submitted
+      ){
+
+        return;
+
+      }
+
+
+      if(
+        document.hidden
+      ){
+
+
+        violations++;
+
+
+        $("viol").textContent =
+          violations;
+
+
+        if(
+          violations >=
+          CFG.maxViol
+        ){
+
+
+          finishExam(
+            "Batas perpindahan tab tercapai — submit otomatis"
+          );
+
+        }
+
+        else{
+
+          pendingWarning =
+            true;
+
+        }
+
+      }
+
+      else if(
+        pendingWarning
+        &&
+        !submitted
+      ){
+
+
+        pendingWarning =
+          false;
+
+
+        $("warnText").textContent =
+          `Perpindahan tab ke-${violations} tercatat. Pada perpindahan ke-${CFG.maxViol}, ujian akan disubmit otomatis.`;
+
+
+        $("overlay")
+          .classList
+          .remove(
+            "hidden"
+          );
+
+      }
+
+    }
+
+  );
+
+
+$("backBtn").onclick =
+()=>{
+
+
+  $("overlay")
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  try{
+
+    document
+      .documentElement
+      .requestFullscreen?.();
+
+  }
+
+  catch(error){
+
+  }
+
+};
+
+
+
+/* ===================================================
+   BASIC ANTI COPY
+=================================================== */
+
+[
+  "contextmenu",
+  "copy",
+  "cut",
+  "paste"
+]
+
+.forEach(
+
+  eventName =>{
+
+
+    document
+      .addEventListener(
+
+        eventName,
+
+        event =>{
+
+
+          if(
+            started
+            &&
+            !submitted
+          ){
+
+            event.preventDefault();
+
+          }
+
+        }
+
+      );
+
+  }
+
+);
+
+
+
+document
+  .addEventListener(
+
+    "keydown",
+
+    event =>{
+
+
+      if(
+        !started
+        ||
+        submitted
+      ){
+
+        return;
+
+      }
+
+
+      const key =
+        event.key
+          .toLowerCase();
+
+
+      if(
+
+        event.key ===
+        "F12"
+
+        ||
+
+        (
+          event.ctrlKey
+          &&
+          [
+            "c",
+            "u",
+            "s",
+            "p"
+          ]
+          .includes(
+            key
+          )
+        )
+
+        ||
+
+        (
+          event.ctrlKey
+          &&
+          event.shiftKey
+          &&
+          [
+            "i",
+            "j",
+            "c"
+          ]
+          .includes(
+            key
+          )
+        )
+
+      ){
+
+        event.preventDefault();
+
+      }
+
+    }
+
+  );
+
+
+
+/* ===================================================
+   RELOAD / CLOSE WARNING
+=================================================== */
+
+window
+  .addEventListener(
+
+    "beforeunload",
+
+    event =>{
+
+
+      if(
+        started
+        &&
+        !submitted
+      ){
+
+        event.preventDefault();
+
+        event.returnValue =
+          "";
+
+      }
+
+    }
+
+  );
+
+</script>
+
+</body>
+</html>
