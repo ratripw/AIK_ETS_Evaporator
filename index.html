@@ -12,7 +12,6 @@
 
 <title>ETS Alat Industri Kimia — Evaporator</title>
 
-
 <style>
 
 :root{
@@ -25,6 +24,8 @@
   --paper:#fbfaf7;
   --bad:#a2443f;
   --ok:#24734f;
+  --answered:#e7f2eb;
+  --current:#153452;
 }
 
 *{
@@ -57,7 +58,7 @@ body.exam{
 }
 
 .wrap{
-  max-width:920px;
+  max-width:980px;
   margin:auto;
   padding:28px 18px 48px;
 }
@@ -189,8 +190,14 @@ input[type=text]{
   border-color:var(--navy);
 }
 
+.btn.submit{
+  background:var(--gold);
+  color:#fff;
+  border-color:var(--gold);
+}
+
 .btn:disabled{
-  opacity:.45;
+  opacity:.4;
   cursor:not-allowed;
 }
 
@@ -221,7 +228,7 @@ input[type=text]{
   background:#edf1f4;
   border-radius:999px;
   overflow:hidden;
-  margin:14px 0 22px;
+  margin:14px 0 18px;
 }
 
 .progress div{
@@ -230,6 +237,117 @@ input[type=text]{
   width:0;
   transition:.2s;
 }
+
+
+/* ===================================================
+   QUESTION NAVIGATOR
+=================================================== */
+
+.navigator-wrap{
+  margin:18px 0 24px;
+  padding:15px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.navigator-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.navigator-title{
+  font-size:13px;
+  font-weight:700;
+  color:var(--navy);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+.answer-status{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.question-nav{
+  display:grid;
+
+  grid-template-columns:
+    repeat(10,1fr);
+
+  gap:8px;
+}
+
+.qnav{
+  height:38px;
+  border-radius:8px;
+
+  border:
+    1px solid
+    var(--line);
+
+  background:#fff;
+  color:var(--navy);
+
+  font-weight:700;
+  cursor:pointer;
+
+  transition:.15s;
+}
+
+.qnav:hover{
+  border-color:var(--blue);
+}
+
+.qnav.answered{
+  background:var(--answered);
+  border-color:#9bc2a9;
+  color:var(--ok);
+}
+
+.qnav.current{
+  background:var(--current);
+  border-color:var(--current);
+  color:#fff;
+}
+
+.legend{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:11px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:3px;
+  border:1px solid var(--line);
+  background:#fff;
+}
+
+.dot.done{
+  background:var(--answered);
+  border-color:#9bc2a9;
+}
+
+.dot.now{
+  background:var(--navy);
+  border-color:var(--navy);
+}
+
 
 .qmeta{
   font-size:13px;
@@ -280,12 +398,6 @@ input[type=text]{
   min-width:22px;
 }
 
-.actions{
-  display:flex;
-  justify-content:flex-end;
-  margin-top:20px;
-}
-
 textarea{
   width:100%;
   min-height:260px;
@@ -311,6 +423,19 @@ textarea{
   margin-top:7px;
 }
 
+.actions{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:22px;
+}
+
+.actions-right{
+  display:flex;
+  gap:10px;
+}
+
 .overlay{
   position:fixed;
   inset:0;
@@ -319,11 +444,11 @@ textarea{
   align-items:center;
   justify-content:center;
   padding:20px;
-  z-index:10;
+  z-index:20;
 }
 
 .warn{
-  max-width:520px;
+  max-width:540px;
   background:#fff;
   border-radius:18px;
   padding:28px;
@@ -390,6 +515,23 @@ textarea{
     font-size:21px;
   }
 
+  .question-nav{
+    grid-template-columns:
+      repeat(5,1fr);
+  }
+
+  .actions{
+    flex-direction:column;
+  }
+
+  .actions-right{
+    width:100%;
+  }
+
+  .actions-right .btn{
+    flex:1;
+  }
+
 }
 
 </style>
@@ -403,7 +545,7 @@ textarea{
 
 
 <!-- ===================================================
-     START
+     START PAGE
 =================================================== -->
 
 <section
@@ -435,7 +577,7 @@ Evaporator
 </b>
 
 <span>
-Seluruh soal wajib dikerjakan.
+Seluruh soal tersedia dalam satu sesi.
 </span>
 
 </div>
@@ -448,7 +590,7 @@ Seluruh soal wajib dikerjakan.
 </b>
 
 <span>
-Seluruh soal wajib dikerjakan.
+Jawaban dapat dibuka dan diperbaiki kembali.
 </span>
 
 </div>
@@ -510,9 +652,10 @@ NPM
 
 <span>
 
-Saya memahami bahwa soal dikerjakan satu per satu,
-tidak dapat kembali ke soal sebelumnya,
-dan perpindahan tab akan tercatat.
+Saya memahami bahwa waktu ujian adalah 45 menit,
+perpindahan tab akan tercatat,
+dan ujian akan disubmit otomatis setelah
+3 kali perpindahan tab.
 
 </span>
 
@@ -538,13 +681,14 @@ Mulai ETS
 
 
 <!-- ===================================================
-     EXAM
+     EXAM PAGE
 =================================================== -->
 
 <section
   class="card hidden"
   id="exam"
 >
+
 
 <div class="top">
 
@@ -571,7 +715,6 @@ ETS • EVAPORATOR
 45:00
 </div>
 
-
 <div class="status">
 
 Perpindahan tab:
@@ -594,6 +737,67 @@ Perpindahan tab:
 </div>
 
 
+
+<!-- ===================================================
+     QUESTION NUMBER NAVIGATION
+=================================================== -->
+
+<div class="navigator-wrap">
+
+<div class="navigator-top">
+
+<div class="navigator-title">
+Navigasi Soal
+</div>
+
+<div
+  id="answerStatus"
+  class="answer-status"
+>
+Terjawab 0 dari 20
+</div>
+
+</div>
+
+
+<div
+  id="questionNav"
+  class="question-nav"
+></div>
+
+
+<div class="legend">
+
+<div class="legend-item">
+
+<span class="dot now"></span>
+
+Soal aktif
+
+</div>
+
+<div class="legend-item">
+
+<span class="dot done"></span>
+
+Sudah dijawab
+
+</div>
+
+<div class="legend-item">
+
+<span class="dot"></span>
+
+Belum dijawab
+
+</div>
+
+</div>
+
+</div>
+
+
+
 <div
   id="qmeta"
   class="qmeta"
@@ -606,6 +810,9 @@ Perpindahan tab:
 ></div>
 
 
+
+<!-- MCQ -->
+
 <div id="mcqArea">
 
 <div
@@ -615,6 +822,9 @@ Perpindahan tab:
 
 </div>
 
+
+
+<!-- ESSAY -->
 
 <div
   id="essayArea"
@@ -645,15 +855,34 @@ kata
 ></p>
 
 
+
 <div class="actions">
 
 <button
-  id="next"
-  class="btn primary"
-  disabled
+  id="prevBtn"
+  class="btn"
 >
-Soal Berikutnya →
+← Sebelumnya
 </button>
+
+
+<div class="actions-right">
+
+<button
+  id="nextBtn"
+  class="btn primary"
+>
+Berikutnya →
+</button>
+
+<button
+  id="submitBtn"
+  class="btn submit"
+>
+Submit Ujian
+</button>
+
+</div>
 
 </div>
 
@@ -735,7 +964,7 @@ Kembali ke Ujian
 
 
 /* ===================================================
-   SUPABASE
+   SUPABASE CONFIG
 =================================================== */
 
 const SUPABASE_URL =
@@ -746,8 +975,9 @@ const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_176X2v4_F8xN1bL-ATPjdg_joLsgsRi";
 
 
+
 /* ===================================================
-   CONFIG
+   EXAM CONFIG
 =================================================== */
 
 const CFG = {
@@ -764,13 +994,12 @@ const $ =
   document.getElementById(id);
 
 
+
 let attemptId = null;
 
 let items = [];
 
 let idx = 0;
-
-let selectedOption = null;
 
 let pgAnswers = {};
 
@@ -830,30 +1059,6 @@ function shuffle(array){
 
 
   return a;
-
-}
-
-
-
-/* ===================================================
-   CONFIG CHECK
-=================================================== */
-
-function readyConfig(){
-
-  return (
-
-    SUPABASE_URL
-      .startsWith(
-        "https://"
-      )
-
-    &&
-
-    SUPABASE_PUBLISHABLE_KEY
-      .length > 20
-
-  );
 
 }
 
@@ -939,7 +1144,7 @@ async function rpc(
 
 
 /* ===================================================
-   START FORM
+   START VALIDATION
 =================================================== */
 
 function validateStart(){
@@ -1003,20 +1208,9 @@ $("agree")
 $("startBtn").onclick =
 async ()=>{
 
+
   $("startError").textContent =
     "";
-
-
-  if(
-    !readyConfig()
-  ){
-
-    $("startError").textContent =
-      "Konfigurasi ujian belum tersedia.";
-
-    return;
-
-  }
 
 
   const studentName =
@@ -1071,6 +1265,7 @@ async ()=>{
       data.attempt_id;
 
 
+
     const mcqs =
       (
         data.questions
@@ -1103,6 +1298,7 @@ async ()=>{
         })
 
       );
+
 
 
     const essays =
@@ -1145,9 +1341,10 @@ async ()=>{
     }
 
 
+
     /*
     SEMUA 16 PG + 4 URAIAN
-    DIACAK MENJADI 20 SOAL
+    DIGABUNG DAN DIACAK
     */
 
     items =
@@ -1160,8 +1357,6 @@ async ()=>{
 
 
     idx = 0;
-
-    selectedOption = null;
 
     pgAnswers = {};
 
@@ -1220,20 +1415,8 @@ async ()=>{
       violations;
 
 
-    try{
-
-      await document
-        .documentElement
-        .requestFullscreen?.();
-
-    }
-
-    catch(error){
-
-    }
-
-
     renderQuestion();
+
 
     updateClock();
 
@@ -1263,6 +1446,20 @@ async ()=>{
         1000
 
       );
+
+
+    try{
+
+      await document
+        .documentElement
+        .requestFullscreen?.();
+
+    }
+
+    catch(error){
+
+    }
+
 
   }
 
@@ -1301,7 +1498,7 @@ async ()=>{
 
 function updateClock(){
 
-  const safeTime =
+  const safe =
     Math.max(
       0,
       secondsLeft
@@ -1310,12 +1507,12 @@ function updateClock(){
 
   const minutes =
     Math.floor(
-      safeTime / 60
+      safe / 60
     );
 
 
   const seconds =
-    safeTime % 60;
+    safe % 60;
 
 
   $("timer").textContent =
@@ -1353,14 +1550,183 @@ function updateClock(){
 
 
 /* ===================================================
+   ANSWER STATUS
+=================================================== */
+
+function isAnswered(item){
+
+  if(
+    item.type ===
+    "mcq"
+  ){
+
+    return !!pgAnswers[
+      item.id
+    ];
+
+  }
+
+
+  return !!(
+    essayAnswers[
+      item.id
+    ]
+    &&
+    essayAnswers[
+      item.id
+    ]
+      .trim()
+  );
+
+}
+
+
+
+function answeredCount(){
+
+  return items.filter(
+    item =>
+      isAnswered(item)
+  ).length;
+
+}
+
+
+
+/* ===================================================
+   NAVIGATOR
+=================================================== */
+
+function renderNavigator(){
+
+  $("questionNav").innerHTML =
+    "";
+
+
+  items.forEach(
+
+    (
+      item,
+      index
+    )=>{
+
+
+      const btn =
+        document
+          .createElement(
+            "button"
+          );
+
+
+      btn.type =
+        "button";
+
+
+      btn.className =
+        "qnav";
+
+
+      btn.textContent =
+        index + 1;
+
+
+      if(
+        isAnswered(item)
+      ){
+
+        btn.classList.add(
+          "answered"
+        );
+
+      }
+
+
+      if(
+        index === idx
+      ){
+
+        btn.classList.remove(
+          "answered"
+        );
+
+        btn.classList.add(
+          "current"
+        );
+
+      }
+
+
+      btn.onclick =
+      ()=>{
+
+        saveCurrentAnswer();
+
+        idx =
+          index;
+
+        renderQuestion();
+
+      };
+
+
+      $("questionNav")
+        .appendChild(
+          btn
+        );
+
+    }
+
+  );
+
+
+  $("answerStatus").textContent =
+    `Terjawab ${answeredCount()} dari ${items.length}`;
+
+}
+
+
+
+/* ===================================================
+   SAVE CURRENT ANSWER
+=================================================== */
+
+function saveCurrentAnswer(){
+
+  const item =
+    items[idx];
+
+
+  if(
+    !item
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    item.type ===
+    "essay"
+  ){
+
+    essayAnswers[
+      item.id
+    ] =
+      $("essayInput")
+        .value;
+
+  }
+
+}
+
+
+
+/* ===================================================
    RENDER QUESTION
 =================================================== */
 
 function renderQuestion(){
-
-  selectedOption = null;
-
-  $("next").disabled = true;
 
   $("examError").textContent =
     "";
@@ -1373,9 +1739,6 @@ function renderQuestion(){
   if(
     !item
   ){
-
-    $("examError").textContent =
-      "Soal tidak ditemukan.";
 
     return;
 
@@ -1392,9 +1755,7 @@ function renderQuestion(){
 
   $("bar").style.width =
     (
-      (
-        idx + 1
-      )
+      answeredCount()
       /
       items.length
       *
@@ -1408,6 +1769,7 @@ function renderQuestion(){
     item.type ===
     "mcq"
   ){
+
 
     $("mcqArea")
       .classList
@@ -1427,117 +1789,138 @@ function renderQuestion(){
       "";
 
 
-    item.options
-      .forEach(
+    item.options.forEach(
 
-        (
-          option,
-          optionIndex
-        )=>{
-
-
-          const button =
-            document
-              .createElement(
-                "button"
-              );
+      (
+        option,
+        optionIndex
+      )=>{
 
 
-          button.className =
-            "opt";
-
-
-          button.type =
-            "button";
-
-
-          const letter =
-            document
-              .createElement(
-                "span"
-              );
-
-
-          letter.className =
-            "letter";
-
-
-          letter.textContent =
-            String.fromCharCode(
-              65 + optionIndex
-            )
-            +
-            ".";
-
-
-          const text =
-            document
-              .createElement(
-                "span"
-              );
-
-
-          text.textContent =
-            option;
-
-
-          button
-            .appendChild(
-              letter
+        const button =
+          document
+            .createElement(
+              "button"
             );
 
 
-          button
-            .appendChild(
-              text
-            );
+        button.className =
+          "opt";
 
 
-          button.onclick =
-          ()=>{
+        button.type =
+          "button";
 
 
-            selectedOption =
-              option;
+        if(
+          pgAnswers[
+            item.id
+          ]
+          ===
+          option
+        ){
 
-
-            [
-              ...$("opts").children
-            ]
-
-            .forEach(
-
-              element =>
-                element
-                  .classList
-                  .remove(
-                    "sel"
-                  )
-
-            );
-
-
-            button
-              .classList
-              .add(
-                "sel"
-              );
-
-
-            $("next").disabled =
-              false;
-
-          };
-
-
-          $("opts")
-            .appendChild(
-              button
-            );
+          button.classList.add(
+            "sel"
+          );
 
         }
 
-      );
+
+        const letter =
+          document
+            .createElement(
+              "span"
+            );
+
+
+        letter.className =
+          "letter";
+
+
+        letter.textContent =
+          String.fromCharCode(
+            65 + optionIndex
+          )
+          +
+          ".";
+
+
+        const text =
+          document
+            .createElement(
+              "span"
+            );
+
+
+        text.textContent =
+          option;
+
+
+        button.appendChild(
+          letter
+        );
+
+
+        button.appendChild(
+          text
+        );
+
+
+        button.onclick =
+        ()=>{
+
+
+          pgAnswers[
+            item.id
+          ] =
+            option;
+
+
+          [
+            ...$("opts").children
+          ]
+
+          .forEach(
+
+            el =>
+              el.classList.remove(
+                "sel"
+              )
+
+          );
+
+
+          button.classList.add(
+            "sel"
+          );
+
+
+          renderNavigator();
+
+
+          $("bar").style.width =
+            (
+              answeredCount()
+              /
+              items.length
+              *
+              100
+            )
+            +
+            "%";
+
+        };
+
+
+        $("opts")
+          .appendChild(
+            button
+          );
+
+      }
+
+    );
 
   }
 
@@ -1558,7 +1941,7 @@ function renderQuestion(){
       );
 
 
-    const savedAnswer =
+    $("essayInput").value =
       essayAnswers[
         item.id
       ]
@@ -1566,21 +1949,13 @@ function renderQuestion(){
       "";
 
 
-    $("essayInput").value =
-      savedAnswer;
-
-
     updateWordCount();
 
-
-    $("next").disabled =
-      !savedAnswer.trim();
-
-
-    $("essayInput")
-      .focus();
-
   }
+
+
+  $("prevBtn").disabled =
+    idx === 0;
 
 
   if(
@@ -1588,24 +1963,27 @@ function renderQuestion(){
     items.length - 1
   ){
 
-    $("next").textContent =
-      "Submit Jawaban";
+    $("nextBtn").disabled =
+      true;
 
   }
 
   else{
 
-    $("next").textContent =
-      "Soal Berikutnya →";
+    $("nextBtn").disabled =
+      false;
 
   }
+
+
+  renderNavigator();
 
 }
 
 
 
 /* ===================================================
-   WORD COUNT
+   ESSAY
 =================================================== */
 
 function updateWordCount(){
@@ -1618,17 +1996,9 @@ function updateWordCount(){
 
   const count =
     text
-
     ?
-
-    text
-      .split(
-        /\s+/
-      )
-      .length
-
+    text.split(/\s+/).length
     :
-
     0;
 
 
@@ -1636,6 +2006,7 @@ function updateWordCount(){
     count;
 
 }
+
 
 
 $("essayInput")
@@ -1663,16 +2034,25 @@ $("essayInput")
       essayAnswers[
         item.id
       ] =
-        $("essayInput").value;
+        $("essayInput")
+          .value;
 
 
       updateWordCount();
 
+      renderNavigator();
 
-      $("next").disabled =
-        !$("essayInput")
-          .value
-          .trim();
+
+      $("bar").style.width =
+        (
+          answeredCount()
+          /
+          items.length
+          *
+          100
+        )
+        +
+        "%";
 
     }
 
@@ -1681,63 +2061,33 @@ $("essayInput")
 
 
 /* ===================================================
-   NEXT
+   PREVIOUS / NEXT
 =================================================== */
 
-$("next").onclick =
-async ()=>{
+$("prevBtn").onclick =
+()=>{
 
-
-  const item =
-    items[idx];
+  saveCurrentAnswer();
 
 
   if(
-    item.type ===
-    "mcq"
+    idx > 0
   ){
 
+    idx--;
 
-    if(
-      !selectedOption
-    ){
-
-      return;
-
-    }
-
-
-    pgAnswers[
-      item.id
-    ] =
-      selectedOption;
+    renderQuestion();
 
   }
 
-  else{
+};
 
 
-    const answer =
-      $("essayInput")
-        .value
-        .trim();
 
+$("nextBtn").onclick =
+()=>{
 
-    if(
-      !answer
-    ){
-
-      return;
-
-    }
-
-
-    essayAnswers[
-      item.id
-    ] =
-      answer;
-
-  }
+  saveCurrentAnswer();
 
 
   if(
@@ -1751,13 +2101,59 @@ async ()=>{
 
   }
 
-  else{
+};
 
-    await finishExam(
-      "Disubmit oleh mahasiswa"
-    );
+
+
+/* ===================================================
+   MANUAL SUBMIT
+=================================================== */
+
+$("submitBtn").onclick =
+async ()=>{
+
+
+  saveCurrentAnswer();
+
+
+  const unanswered =
+    items.length
+    -
+    answeredCount();
+
+
+  let message =
+    "Apakah Anda yakin ingin mengirim seluruh jawaban?";
+
+
+  if(
+    unanswered > 0
+  ){
+
+    message =
+      `Masih ada ${unanswered} soal yang belum dijawab.\n\nTetap submit ujian?`;
 
   }
+
+
+  const confirmSubmit =
+    window.confirm(
+      message
+    );
+
+
+  if(
+    !confirmSubmit
+  ){
+
+    return;
+
+  }
+
+
+  await finishExam(
+    "Disubmit oleh mahasiswa"
+  );
 
 };
 
@@ -1781,6 +2177,9 @@ async function finishExam(
   }
 
 
+  saveCurrentAnswer();
+
+
   submitted = true;
 
   started = false;
@@ -1789,56 +2188,6 @@ async function finishExam(
   clearInterval(
     timerInterval
   );
-
-
-  const activeItem =
-    items[idx];
-
-
-  /*
-  SIMPAN JAWABAN AKTIF
-  JIKA AUTO-SUBMIT
-  */
-
-
-  if(
-    activeItem?.type ===
-    "mcq"
-    &&
-    selectedOption
-  ){
-
-    pgAnswers[
-      activeItem.id
-    ] =
-      selectedOption;
-
-  }
-
-
-  if(
-    activeItem?.type ===
-    "essay"
-  ){
-
-    const text =
-      $("essayInput")
-        .value
-        .trim();
-
-
-    if(
-      text
-    ){
-
-      essayAnswers[
-        activeItem.id
-      ] =
-        text;
-
-    }
-
-  }
 
 
   const pgPayload =
@@ -1871,6 +2220,20 @@ async function finishExam(
       essayAnswers
     )
 
+    .filter(
+
+      (
+        [
+          essayId,
+          answerText
+        ]
+      ) =>
+        answerText
+        &&
+        answerText.trim()
+
+    )
+
     .map(
 
       (
@@ -1884,18 +2247,18 @@ async function finishExam(
           essayId,
 
         answer_text:
-          answerText
+          answerText.trim()
 
       })
 
     );
 
 
-  $("next").disabled =
+  $("submitBtn").disabled =
     true;
 
 
-  $("next").textContent =
+  $("submitBtn").textContent =
     "Mengirim…";
 
 
@@ -1962,11 +2325,6 @@ async function finishExam(
       );
 
 
-    /*
-    NILAI TIDAK DITAMPILKAN.
-    SCORE PG TERSIMPAN DI SUPABASE.
-    */
-
     $("submissionId").textContent =
       "Submission ID: "
       +
@@ -1974,7 +2332,6 @@ async function finishExam(
 
 
     try{
-
 
       if(
         document.fullscreenElement
@@ -2006,15 +2363,15 @@ async function finishExam(
       +
       error.message
       +
-      ". Jangan tutup halaman. Silakan tekan Submit lagi.";
+      ". Jangan tutup halaman. Silakan submit kembali.";
 
 
-    $("next").disabled =
+    $("submitBtn").disabled =
       false;
 
 
-    $("next").textContent =
-      "Coba Submit Lagi";
+    $("submitBtn").textContent =
+      "Submit Ujian";
 
   }
 
@@ -2050,6 +2407,9 @@ document
       ){
 
 
+        saveCurrentAnswer();
+
+
         violations++;
 
 
@@ -2061,7 +2421,6 @@ document
           violations >=
           CFG.maxViol
         ){
-
 
           finishExam(
             "Batas perpindahan tab tercapai — submit otomatis"
@@ -2104,6 +2463,7 @@ document
     }
 
   );
+
 
 
 $("backBtn").onclick =
@@ -2252,7 +2612,7 @@ document
 
 
 /* ===================================================
-   RELOAD / CLOSE WARNING
+   CLOSE / RELOAD WARNING
 =================================================== */
 
 window
